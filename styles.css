@@ -1,0 +1,293 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --green: hsl(171, 66%, 44%);
+  --blue: hsl(233, 100%, 69%);
+  --gray-700: hsl(210, 10%, 33%);
+  --gray-500: hsl(201, 11%, 66%);
+}
+body {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-size: 18px;
+  color: var(--gray-700);
+  overflow-x: hidden;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+a {
+  text-decoration: none;
+}
+.btn {
+  display: inline-block;
+  padding: 0.85em 2.2em;
+  border-radius: 50px;
+  font-family: "Bai Jamjuree", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.15s;
+}
+.btn:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+.btn-green {
+  background: var(--green);
+  box-shadow:
+    0 4px 14px hsla(171, 66%, 44%, 0.45),
+    inset 0 -3px 0 hsla(171, 66%, 28%, 0.3);
+}
+.btn-blue {
+  background: var(--blue);
+  box-shadow:
+    0 4px 14px hsla(233, 100%, 69%, 0.45),
+    inset 0 -3px 0 hsla(233, 100%, 48%, 0.3);
+}
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero {
+  text-align: center;
+  padding: 7rem 1.5rem 5.5rem;
+  background-image: url("bg-header-desktop.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+.hero__logo {
+  width: 125px;
+  margin: 0 auto 3.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--gray-700);
+  max-width: 680px;
+  margin: 0 auto 1.2rem;
+}
+.hero p {
+  color: var(--gray-500);
+  line-height: 1.8;
+  max-width: 580px;
+  margin: 0 auto 2.8rem;
+}
+section {
+  padding: 5rem 1.5rem;
+}
+.section-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 4rem;
+}
+.section-header h2 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 1rem;
+}
+.section-header p {
+  color: var(--gray-500);
+  line-height: 1.8;
+}
+.snippets {
+  overflow: hidden;
+}
+.snippets__inner {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.snippets__img {
+  flex: 1 1 50%;
+  margin-left: -5rem;
+}
+.snippets__img img {
+  width: 100%;
+}
+.snippets__features {
+  flex: 1 1 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.feature h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
+}
+.feature p {
+  color: var(--gray-500);
+  line-height: 1.8;
+  max-width: 350px;
+  font-size: 0.95rem;
+}
+.access {
+  text-align: center;
+}
+.access__img {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.workflow {
+  text-align: center;
+}
+.workflow__cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.card {
+  flex: 1 1 250px;
+  max-width: 330px;
+  padding: 0 0.5rem;
+}
+.card__icon {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+}
+.card__icon img {
+  max-height: 50px;
+  width: auto;
+}
+.card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 0.75rem;
+}
+.card p {
+  color: var(--gray-500);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+.logos {
+  padding: 4rem 1.5rem;
+}
+.logos__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2.5rem 5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.logos__inner img {
+  max-height: 36px;
+  width: auto;
+  opacity: 0.55;
+  filter: grayscale(1);
+  transition:
+    opacity 0.2s,
+    filter 0.2s;
+}
+.logos__inner img:hover {
+  opacity: 1;
+  filter: none;
+}
+footer {
+  background: hsl(201, 11%, 94%);
+  padding: 2.5rem 2rem;
+}
+.footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer__logo img {
+  width: 55px;
+}
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 3.5rem;
+  row-gap: 0.6rem;
+}
+.footer__links a {
+  color: var(--gray-700);
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.footer__links a:hover {
+  color: var(--green);
+}
+.footer__social {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.footer__social a {
+  display: flex;
+  align-items: center;
+  filter: brightness(0) saturate(100%) invert(25%) sepia(10%) saturate(500%)
+    hue-rotate(173deg) brightness(85%);
+  transition: filter 0.2s;
+}
+.footer__social a:hover {
+  filter: brightness(0) saturate(100%) invert(58%) sepia(72%) saturate(420%)
+    hue-rotate(127deg) brightness(88%);
+}
+.footer__social img {
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 768px) {
+  .hero {
+    background-image: url("bg-header-mobile.png");
+    padding: 5rem 1.5rem 4rem;
+  }
+  .snippets__inner {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .snippets__img {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  .snippets__features {
+    align-items: center;
+    text-align: center;
+  }
+  .feature p {
+    max-width: 100%;
+  }
+  .footer__inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .footer__links {
+    justify-content: center;
+  }
+}
+/* the reason i used var was because i already defined variable in the :root  */
+/* some part of this styling was completed using stackoverflow to better understand the styling guide as recommended like inset overflow-x and filter */
