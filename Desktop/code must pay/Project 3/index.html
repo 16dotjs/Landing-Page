@@ -1,0 +1,4795 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flowdesk — Your Team's Command Center</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #000;
+        --bg2: #0a0a0a;
+        --bg3: #111;
+        --bg4: #161616;
+        --accent: #7c3aed;
+        --grad: linear-gradient(135deg, #7c3aed, #ec4899);
+        --text: #fff;
+        --text2: #a1a1aa;
+        --text3: #52525b;
+        --border: #1f1f1f;
+        --border2: #2d2d2d;
+        --fd: "Syne", sans-serif;
+        --fb: "DM Sans", sans-serif;
+        --r: 12px;
+        --rs: 8px;
+        --rl: 16px;
+        --rxl: 24px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--fb);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--fd);
+      }
+      .grad-text {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 clamp(1.25rem, 4vw, 3rem);
+      }
+      .section {
+        padding: 6rem 0;
+      }
+
+      /* BUTTONS */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-family: var(--fb);
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: var(--r);
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+        padding: 0.72rem 1.6rem;
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: var(--grad);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(124, 58, 237, 0.4);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--border2);
+        transform: translateY(-2px);
+      }
+      .btn-lg {
+        padding: 0.85rem 2rem;
+        font-size: 1rem;
+      }
+
+      /* SECTION HEADER */
+      .section-header {
+        text-align: center;
+        margin-bottom: 3.5rem;
+      }
+      .section-label {
+        display: inline-block;
+        padding: 0.3rem 0.85rem;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.25);
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #a78bfa;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+      .section-sub {
+        margin-top: 0.75rem;
+        font-size: 1rem;
+        color: var(--text2);
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* NAVBAR */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: 68px;
+        padding: 0 clamp(1.25rem, 4vw, 3rem);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid transparent;
+        transition:
+          background 0.35s,
+          border-color 0.35s;
+      }
+      .navbar.scrolled {
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(20px);
+        border-bottom-color: var(--border);
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: var(--fd);
+        font-weight: 700;
+        font-size: 1.2rem;
+        letter-spacing: -0.02em;
+        cursor: pointer;
+      }
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+        background: var(--grad);
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-mark svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        list-style: none;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .nav-links a {
+        display: block;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.875rem;
+        color: var(--text2);
+        cursor: pointer;
+        border-radius: var(--rs);
+        transition:
+          color 0.2s,
+          background 0.2s;
+        position: relative;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .nav-links a.active {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .nav-links a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .nav-signin {
+        font-size: 0.875rem;
+        color: var(--text2);
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .nav-signin:hover {
+        color: var(--text);
+      }
+      .btn-nav {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.48rem 1.15rem;
+        background: var(--grad);
+        color: #fff;
+        font-family: var(--fb);
+        font-size: 0.85rem;
+        font-weight: 500;
+        border-radius: var(--rs);
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+        border: none;
+      }
+      .btn-nav:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+      }
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--rs);
+        padding: 8px;
+      }
+      .hamburger span {
+        display: block;
+        width: 18px;
+        height: 1.5px;
+        background: var(--text);
+        border-radius: 2px;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+      .hamburger.open span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+      }
+      .hamburger.open span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      .hamburger.open span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+      }
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.97);
+        backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem 1.75rem;
+        flex-direction: column;
+        gap: 0.25rem;
+        z-index: 999;
+      }
+      .mobile-menu.open {
+        display: flex;
+        animation: mobileIn 0.25s ease;
+      }
+      @keyframes mobileIn {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .mobile-menu a {
+        display: block;
+        padding: 0.75rem 0.5rem;
+        font-size: 1rem;
+        color: var(--text2);
+        cursor: pointer;
+        border-bottom: 1px solid var(--border);
+        transition: color 0.2s;
+      }
+      .mobile-menu a:hover,
+      .mobile-menu a.active {
+        color: var(--text);
+      }
+      .mobile-cta {
+        margin-top: 1rem;
+        text-align: center;
+        padding: 0.75rem !important;
+        background: var(--grad);
+        color: #fff !important;
+        font-weight: 500 !important;
+        border-radius: var(--r) !important;
+        border-bottom: none !important;
+      }
+
+      /* BADGE */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.28);
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #a78bfa;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #7c3aed;
+        box-shadow: 0 0 6px #7c3aed;
+        animation: blink 2s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 6px #7c3aed;
+        }
+        50% {
+          opacity: 0.5;
+          box-shadow: 0 0 14px #7c3aed;
+        }
+      }
+
+      /* PAGE CONTAINER */
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+
+      /* SCROLL REVEAL */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .d1 {
+        transition-delay: 0.1s;
+      }
+      .d2 {
+        transition-delay: 0.2s;
+      }
+      .d3 {
+        transition-delay: 0.3s;
+      }
+      .d4 {
+        transition-delay: 0.4s;
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9999;
+        padding: 1rem 1.5rem;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.875rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        animation: toastIn 0.3s ease;
+        max-width: 320px;
+      }
+      .toast.success {
+        border-color: rgba(52, 211, 153, 0.4);
+      }
+      .toast.error {
+        border-color: rgba(248, 113, 113, 0.4);
+      }
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateX(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes toastOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+          transform: translateX(16px);
+        }
+      }
+
+      /* ══ HERO ══ */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5rem clamp(1.25rem, 5vw, 4rem) 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-glow {
+        position: absolute;
+        top: -5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 600px;
+        background: radial-gradient(
+          ellipse,
+          rgba(124, 58, 237, 0.2),
+          transparent 65%
+        );
+        pointer-events: none;
+        animation: glowPulse 4s ease-in-out infinite;
+      }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1.2;
+        }
+      }
+      .hero-glow2 {
+        position: absolute;
+        bottom: 5%;
+        right: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(236, 72, 153, 0.1),
+          transparent 65%
+        );
+        pointer-events: none;
+      }
+      .hero > * {
+        position: relative;
+        z-index: 1;
+      }
+      .hero-badge-wrap {
+        margin-bottom: 1.75rem;
+      }
+      .hero h1 {
+        font-size: clamp(2.8rem, 7vw, 5.2rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.06;
+        max-width: 820px;
+      }
+      .hero-sub {
+        margin-top: 1.25rem;
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        color: var(--text2);
+        max-width: 520px;
+        font-weight: 300;
+        line-height: 1.75;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 2.25rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .hero-notice {
+        margin-top: 1.25rem;
+        font-size: 0.78rem;
+        color: var(--text3);
+      }
+
+      /* Dashboard mock */
+      .hero-dash {
+        margin-top: 4rem;
+        width: min(780px, 92vw);
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rxl);
+        overflow: hidden;
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.7),
+          0 0 0 1px rgba(124, 58, 237, 0.08);
+      }
+      .dash-topbar {
+        background: var(--bg3);
+        border-bottom: 1px solid var(--border);
+        padding: 0.65rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .dd {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .dd.r {
+        background: #ff5f57;
+      }
+      .dd.y {
+        background: #ffbd2e;
+      }
+      .dd.g {
+        background: #28c840;
+      }
+      .dash-title-txt {
+        margin-left: 0.75rem;
+        font-size: 0.75rem;
+        color: var(--text3);
+        font-family: var(--fd);
+        font-weight: 600;
+      }
+      .dash-body {
+        padding: 1.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+      .dstat {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1rem 1.1rem;
+      }
+      .dstat-lbl {
+        font-size: 0.68rem;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.4rem;
+      }
+      .dstat-val {
+        font-family: var(--fd);
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+      .dstat-val.p {
+        color: #a78bfa;
+      }
+      .dstat-val.pk {
+        color: #f472b6;
+      }
+      .dstat-val.g {
+        color: #34d399;
+      }
+      .dstat-chg {
+        font-size: 0.72rem;
+        color: #34d399;
+        margin-top: 0.2rem;
+      }
+      .dchart {
+        grid-column: 1/-1;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1rem 1.1rem;
+      }
+      .dchart-hdr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .dchart-title {
+        font-size: 0.78rem;
+        color: var(--text2);
+        font-weight: 500;
+      }
+      .dchart-legend {
+        display: flex;
+        gap: 1rem;
+      }
+      .dleg {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.68rem;
+        color: var(--text3);
+      }
+      .dleg-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .dleg-dot.p {
+        background: #7c3aed;
+      }
+      .dleg-dot.pk {
+        background: #ec4899;
+      }
+      .dbars {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 70px;
+      }
+      .dbar-grp {
+        flex: 1;
+        display: flex;
+        gap: 2px;
+        align-items: flex-end;
+      }
+      .dbar {
+        flex: 1;
+        border-radius: 3px 3px 0 0;
+        transition: opacity 0.2s;
+        cursor: pointer;
+      }
+      .dbar:hover {
+        opacity: 0.75;
+      }
+      .dbar.a {
+        background: var(--accent);
+      }
+      .dbar.b {
+        background: #ec4899;
+      }
+      .dtasks {
+        grid-column: 1/-1;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      .dtasks-hdr {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.75rem;
+        color: var(--text2);
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+      }
+      .dtask-row {
+        padding: 0.65rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-bottom: 1px solid rgba(31, 31, 31, 0.6);
+      }
+      .dtask-row:last-child {
+        border-bottom: none;
+      }
+      .tstatus {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .tstatus.done {
+        background: #34d399;
+      }
+      .tstatus.prog {
+        background: #7c3aed;
+      }
+      .tstatus.pend {
+        background: #52525b;
+      }
+      .tname {
+        font-size: 0.78rem;
+        color: var(--text2);
+        flex: 1;
+      }
+      .ttag {
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.65rem;
+      }
+      .ttag.purple {
+        background: rgba(124, 58, 237, 0.15);
+        color: #a78bfa;
+      }
+      .ttag.pink {
+        background: rgba(236, 72, 153, 0.12);
+        color: #f472b6;
+      }
+      .ttag.green {
+        background: rgba(52, 211, 153, 0.1);
+        color: #34d399;
+      }
+      .ttag.grey {
+        background: rgba(82, 82, 91, 0.2);
+        color: var(--text3);
+      }
+
+      /* Stats */
+      .stats-bar {
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--bg2);
+        padding: 3rem 0;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        text-align: center;
+      }
+      .stat-num {
+        font-family: var(--fd);
+        font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        word-break: break-word;
+      }
+      .stat-lbl {
+        font-size: 0.8rem;
+        color: var(--text2);
+        margin-top: 0.25rem;
+      }
+
+      /* ══ ANIMATED FEAT ICONS ══ */
+
+      /* Task Management — 4 squares pulsing in sequence */
+      @keyframes sq1 {
+        0%,
+        100% {
+          opacity: 0.9;
+          transform: scale(1);
+        }
+        25% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(0.95);
+        }
+      }
+      @keyframes sq2 {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        35% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+        60% {
+          opacity: 0.5;
+          transform: scale(0.95);
+        }
+      }
+      @keyframes sq3 {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+        75% {
+          opacity: 0.5;
+          transform: scale(0.95);
+        }
+      }
+      @keyframes sq4 {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        65% {
+          opacity: 0.9;
+          transform: scale(1.15);
+        }
+        90% {
+          opacity: 0.3;
+          transform: scale(0.95);
+        }
+      }
+
+      .icon-task .sq1 {
+        animation: sq1 2.4s ease-in-out infinite;
+        transform-origin: center;
+      }
+      .icon-task .sq2 {
+        animation: sq2 2.4s ease-in-out infinite 0.3s;
+        transform-origin: center;
+      }
+      .icon-task .sq3 {
+        animation: sq3 2.4s ease-in-out infinite 0.6s;
+        transform-origin: center;
+      }
+      .icon-task .sq4 {
+        animation: sq4 2.4s ease-in-out infinite 0.9s;
+        transform-origin: center;
+      }
+
+      /* Team — orbit dots around person */
+      @keyframes orbit {
+        0% {
+          transform: rotate(0deg) translateX(9px) rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg) translateX(9px) rotate(-360deg);
+        }
+      }
+      @keyframes orbit2 {
+        0% {
+          transform: rotate(180deg) translateX(9px) rotate(-180deg);
+        }
+        100% {
+          transform: rotate(540deg) translateX(9px) rotate(-540deg);
+        }
+      }
+      @keyframes headPulse {
+        0%,
+        100% {
+          r: 4;
+          opacity: 1;
+        }
+        50% {
+          r: 4.5;
+          opacity: 0.8;
+        }
+      }
+      .icon-team .orbit-dot1 {
+        animation: orbit 3s linear infinite;
+        transform-origin: 9px 7px;
+      }
+      .icon-team .orbit-dot2 {
+        animation: orbit2 3s linear infinite;
+        transform-origin: 9px 7px;
+      }
+      .icon-team .head {
+        animation: headPulse 2s ease-in-out infinite;
+      }
+
+      /* Analytics — wave polyline draw */
+      @keyframes waveDraw {
+        0% {
+          stroke-dashoffset: 80;
+        }
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes wavePulse {
+        0%,
+        100% {
+          stroke-width: 1.8;
+          filter: drop-shadow(0 0 0px #a78bfa);
+        }
+        50% {
+          stroke-width: 2.2;
+          filter: drop-shadow(0 0 4px #a78bfa);
+        }
+      }
+      .icon-analytics .wave {
+        stroke-dasharray: 80;
+        animation:
+          waveDraw 2s ease-in-out infinite alternate,
+          wavePulse 2s ease-in-out infinite;
+      }
+
+      /* Link/Integrations — rotating chain links */
+      @keyframes spinCW {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinCCW {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+      @keyframes linkPulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .icon-link .ring1 {
+        animation: spinCW 3s linear infinite;
+        transform-origin: 8px 8px;
+      }
+      .icon-link .ring2 {
+        animation: spinCCW 3s linear infinite;
+        transform-origin: 16px 16px;
+      }
+      .icon-link .link-line {
+        animation: linkPulse 1.5s ease-in-out infinite;
+      }
+
+      /* Feature cards */
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.25rem;
+      }
+      .feat-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 1.75rem;
+        transition:
+          border-color 0.25s,
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .feat-card:hover {
+        border-color: rgba(124, 58, 237, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      .feat-icon {
+        width: 44px;
+        height: 44px;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.1rem;
+        overflow: visible;
+      }
+      .feat-icon svg {
+        width: 22px;
+        height: 22px;
+        stroke: #a78bfa;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        overflow: visible;
+      }
+      .feat-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.5rem;
+      }
+      .feat-card p {
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+
+      /* How it works */
+      .hiw {
+        background: var(--bg2);
+      }
+      .hiw-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        position: relative;
+      }
+      .hiw-line {
+        position: absolute;
+        top: 32px;
+        left: calc(33.3% + 1rem);
+        right: calc(33.3% + 1rem);
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          rgba(124, 58, 237, 0.4),
+          rgba(236, 72, 153, 0.4)
+        );
+        pointer-events: none;
+      }
+      .hiw-step {
+        text-align: center;
+        padding: 2rem 1.5rem;
+      }
+      .step-num {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        margin: 0 auto 1.25rem;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
+      }
+      .hiw-step h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.01em;
+      }
+      .hiw-step p {
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+
+      /* Testimonials */
+      .testi-wrap {
+        overflow: hidden;
+      }
+      .testi-track {
+        display: flex;
+        gap: 1.25rem;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .testi-card {
+        flex-shrink: 0;
+        width: calc(33.333% - 0.85rem);
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 1.75rem;
+      }
+      .testi-stars {
+        color: #fbbf24;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+      }
+      .testi-quote {
+        font-size: 0.95rem;
+        color: var(--text2);
+        line-height: 1.7;
+        font-style: italic;
+        margin-bottom: 1.25rem;
+      }
+      .testi-author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .tav {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        font-weight: 700;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .taname {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .tarole {
+        font-size: 0.78rem;
+        color: var(--text3);
+      }
+      .testi-controls {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        align-items: center;
+      }
+      .tbtn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--text2);
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .tbtn:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .tdots {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .tdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border2);
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .tdot.active {
+        background: var(--accent);
+        transform: scale(1.3);
+      }
+
+      /* CTA Banner */
+      .cta-banner {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 6rem 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-banner::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 300px;
+        background: radial-gradient(
+          ellipse,
+          rgba(124, 58, 237, 0.18),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .cta-banner > .container {
+        position: relative;
+        z-index: 1;
+      }
+      .cta-title {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .cta-sub {
+        margin: 0.75rem auto 2rem;
+        font-size: 1rem;
+        color: var(--text2);
+        max-width: 440px;
+      }
+      .cta-btns {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* ══ ANIMATED CHIP SVGS ══ */
+      @keyframes chipFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+      }
+      @keyframes chipGlow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 0px rgba(124, 58, 237, 0));
+        }
+        50% {
+          filter: drop-shadow(0 0 6px rgba(124, 58, 237, 0.5));
+        }
+      }
+      @keyframes slackSpin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes githubFloat {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-2px) scale(1.04);
+        }
+      }
+      @keyframes figmaColorCycle {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        33% {
+          opacity: 0.7;
+        }
+        66% {
+          opacity: 0.9;
+        }
+      }
+      @keyframes zapStar {
+        0%,
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        50% {
+          transform: scale(1.15);
+          filter: brightness(1.4);
+        }
+      }
+      @keyframes linearSlide {
+        0% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(2px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      @keyframes jiraPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+      @keyframes notionBlink {
+        0%,
+        90%,
+        100% {
+          opacity: 1;
+        }
+        95% {
+          opacity: 0.4;
+        }
+      }
+      @keyframes driveRotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes mailShake {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        10% {
+          transform: rotate(-4deg);
+        }
+        20% {
+          transform: rotate(4deg);
+        }
+        30% {
+          transform: rotate(0deg);
+        }
+      }
+      @keyframes teamsScale {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.06);
+        }
+      }
+      @keyframes morePlus {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(90deg) scale(1.1);
+        }
+      }
+
+      .integration-chip {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1.25rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          border-color 0.25s,
+          transform 0.25s,
+          box-shadow 0.25s;
+        overflow: hidden;
+      }
+      .integration-chip:hover {
+        border-color: rgba(124, 58, 237, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+      }
+      .chip-svg {
+        width: 36px;
+        height: 36px;
+        margin: 0 auto 0.6rem;
+      }
+      .chip-svg svg {
+        transition: transform 0.3s ease;
+      }
+      .chip-name {
+        font-size: 0.78rem;
+        color: var(--text2);
+        font-weight: 500;
+      }
+
+      /* Per-chip animations (trigger on page load, staggered) */
+      .chip-slack svg {
+        animation: chipFloat 3s ease-in-out infinite;
+      }
+      .chip-github svg {
+        animation: githubFloat 3.5s ease-in-out infinite 0.3s;
+      }
+      .chip-figma svg {
+        animation: chipFloat 3.2s ease-in-out infinite 0.6s;
+      }
+      .chip-notion svg {
+        animation: notionBlink 4s ease-in-out infinite 0.2s;
+      }
+      .chip-gdrive svg {
+        animation: chipFloat 3.8s ease-in-out infinite 0.8s;
+      }
+      .chip-gmail svg {
+        animation: mailShake 4s ease-in-out infinite 1s;
+      }
+      .chip-zapier svg {
+        animation: zapStar 2.5s ease-in-out infinite 0.4s;
+      }
+      .chip-gitlab svg {
+        animation: chipFloat 4s ease-in-out infinite 0.5s;
+      }
+      .chip-jira svg {
+        animation: jiraPulse 3s ease-in-out infinite 0.7s;
+      }
+      .chip-linear svg {
+        animation: linearSlide 3s ease-in-out infinite 0.1s;
+      }
+      .chip-teams svg {
+        animation: teamsScale 3.5s ease-in-out infinite 0.9s;
+      }
+      .chip-more svg {
+        animation: morePlus 3s ease-in-out infinite;
+      }
+
+      .integration-chip:hover svg {
+        animation-play-state: paused;
+        transform: scale(1.12) rotate(-4deg);
+      }
+      .integrations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 1rem;
+      }
+
+      /* PAGE HERO */
+      .page-hero {
+        padding: 10rem clamp(1.25rem, 6vw, 6rem) 5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .page-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 500px;
+        background: radial-gradient(
+          ellipse,
+          rgba(124, 58, 237, 0.16),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .page-hero h1 {
+        font-size: clamp(2.2rem, 5vw, 3.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        position: relative;
+      }
+      .page-hero p {
+        margin-top: 1rem;
+        font-size: 1.1rem;
+        color: var(--text2);
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+      }
+
+      /* Feature tabs */
+      .feat-tabs {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+      .ftab {
+        padding: 0.55rem 1.25rem;
+        border-radius: 100px;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        font-size: 0.875rem;
+        color: var(--text2);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .ftab:hover {
+        border-color: var(--border2);
+        color: var(--text);
+      }
+      .ftab.active {
+        background: rgba(124, 58, 237, 0.15);
+        border-color: rgba(124, 58, 237, 0.4);
+        color: #a78bfa;
+        font-weight: 500;
+      }
+      .ftab-panel {
+        display: none;
+      }
+      .ftab-panel.active {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
+      .fbig-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 2rem;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+      }
+      .fbig-card:hover {
+        border-color: rgba(124, 58, 237, 0.3);
+        transform: translateY(-3px);
+      }
+      .fbig-icon {
+        width: 52px;
+        height: 52px;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        border-radius: var(--rl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+      }
+      .fbig-icon svg {
+        width: 26px;
+        height: 26px;
+        stroke: #a78bfa;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .fbig-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .fbig-card p {
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+      .fbig-card ul {
+        list-style: none;
+        margin-top: 1rem;
+      }
+      .fbig-card li {
+        font-size: 0.875rem;
+        color: var(--text2);
+        padding: 0.35rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        border-bottom: 1px solid rgba(31, 31, 31, 0.6);
+      }
+      .fbig-card li:last-child {
+        border-bottom: none;
+      }
+      .fbig-card li::before {
+        content: "✓";
+        color: #7c3aed;
+        font-weight: 700;
+        font-size: 0.8rem;
+      }
+
+      /* PRICING */
+      .pricing-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 3.5rem;
+      }
+      .toggle-label {
+        font-size: 0.9rem;
+        color: var(--text2);
+      }
+      .toggle-label.active {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .toggle-switch {
+        width: 52px;
+        height: 28px;
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 100px;
+        cursor: pointer;
+        position: relative;
+        transition: background 0.2s;
+      }
+      .toggle-switch.on {
+        background: var(--accent);
+      }
+      .toggle-knob {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.25s;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+      .toggle-switch.on .toggle-knob {
+        transform: translateX(24px);
+      }
+      .annual-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.25);
+        border-radius: 100px;
+        font-size: 0.72rem;
+        color: #34d399;
+        font-weight: 600;
+      }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+        align-items: start;
+      }
+      .plan-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rxl);
+        padding: 2rem;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+      }
+      .plan-card.popular {
+        border-color: rgba(124, 58, 237, 0.5);
+        transform: scale(1.03);
+        position: relative;
+      }
+      .plan-card.popular::before {
+        content: "Most Popular";
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--grad);
+        padding: 0.3rem 1rem;
+        border-radius: 100px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #fff;
+        white-space: nowrap;
+      }
+      .plan-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.75rem;
+      }
+      .plan-price {
+        font-family: var(--fd);
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .plan-price sup {
+        font-size: 1.2rem;
+        vertical-align: super;
+        margin-right: 0.1rem;
+        font-weight: 500;
+      }
+      .plan-price span {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: var(--text2);
+      }
+      .plan-desc {
+        margin-top: 0.75rem;
+        font-size: 0.875rem;
+        color: var(--text2);
+        line-height: 1.6;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .plan-features {
+        list-style: none;
+        margin: 1.5rem 0;
+      }
+      .plan-features li {
+        font-size: 0.875rem;
+        color: var(--text2);
+        padding: 0.45rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        border-bottom: 1px solid rgba(31, 31, 31, 0.5);
+      }
+      .plan-features li:last-child {
+        border-bottom: none;
+      }
+      .pcheck {
+        color: #7c3aed;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+      .plan-btn {
+        display: block;
+        width: 100%;
+        padding: 0.8rem;
+        text-align: center;
+        border-radius: var(--r);
+        font-family: var(--fb);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+        border: none;
+        margin-top: auto;
+      }
+      .plan-btn.primary {
+        background: var(--grad);
+        color: #fff;
+      }
+      .plan-btn.primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(124, 58, 237, 0.4);
+      }
+      .plan-btn.outline {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .plan-btn.outline:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--border2);
+      }
+      .faq-section {
+        background: var(--bg2);
+      }
+      .faq-list {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+      }
+      .faq-q {
+        padding: 1.25rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        gap: 1rem;
+      }
+      .faq-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition:
+          background 0.2s,
+          transform 0.3s;
+      }
+      .faq-item.open .faq-icon {
+        background: rgba(124, 58, 237, 0.2);
+        border-color: rgba(124, 58, 237, 0.4);
+        transform: rotate(45deg);
+      }
+      .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+      }
+      .faq-a-inner {
+        padding-bottom: 1.25rem;
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+      .faq-item.open .faq-a {
+        max-height: 200px;
+      }
+
+      /* CONTACT */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 4rem;
+        align-items: start;
+      }
+      .contact-info h2 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .contact-info p {
+        color: var(--text2);
+        line-height: 1.75;
+        font-size: 0.95rem;
+      }
+      .contact-channels {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .channel-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: border-color 0.2s;
+      }
+      .channel-card:hover {
+        border-color: rgba(124, 58, 237, 0.35);
+      }
+      .channel-icon {
+        width: 42px;
+        height: 42px;
+        background: rgba(124, 58, 237, 0.1);
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        border-radius: var(--rs);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .channel-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: #a78bfa;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .channel-label {
+        font-size: 0.78rem;
+        color: var(--text3);
+        margin-bottom: 0.15rem;
+      }
+      .channel-val {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      .form-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rxl);
+        padding: 2.5rem;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text2);
+        margin-bottom: 0.5rem;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--rs);
+        padding: 0.75rem 1rem;
+        font-family: var(--fb);
+        font-size: 0.9rem;
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        resize: vertical;
+        -webkit-appearance: none;
+      }
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: var(--text3);
+      }
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: rgba(124, 58, 237, 0.5);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      }
+      .form-group select option {
+        background: var(--bg3);
+      }
+      .form-group textarea {
+        min-height: 130px;
+      }
+      .form-submit {
+        width: 100%;
+        padding: 0.85rem;
+        background: var(--grad);
+        color: #fff;
+        font-family: var(--fb);
+        font-size: 0.95rem;
+        font-weight: 500;
+        border: none;
+        border-radius: var(--r);
+        cursor: pointer;
+        transition:
+          opacity 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .form-submit:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(124, 58, 237, 0.4);
+      }
+      .form-submit:disabled {
+        opacity: 0.6;
+        transform: none;
+        cursor: not-allowed;
+      }
+
+      /* ══ ABOUT PAGE ══ */
+      .about-mission {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .mission-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+      }
+      .mission-text h2 {
+        font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        margin-bottom: 1.25rem;
+      }
+      .mission-text p {
+        color: var(--text2);
+        line-height: 1.85;
+        font-size: 0.975rem;
+        margin-bottom: 1rem;
+      }
+      .mission-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .mstat {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 1.25rem;
+      }
+      .mstat-num {
+        font-family: var(--fd);
+        font-size: 1.9rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .mstat-lbl {
+        font-size: 0.78rem;
+        color: var(--text2);
+        margin-top: 0.2rem;
+      }
+
+      .mission-visual {
+        position: relative;
+        height: 360px;
+      }
+      .mv-card {
+        position: absolute;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 1.25rem 1.5rem;
+      }
+      .mv-card.c1 {
+        top: 0;
+        left: 0;
+        right: 15%;
+        animation: mvFloat1 5s ease-in-out infinite;
+      }
+      .mv-card.c2 {
+        bottom: 0;
+        left: 15%;
+        right: 0;
+        animation: mvFloat2 5s ease-in-out infinite 0.8s;
+      }
+      .mv-card.c3 {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 160px;
+        text-align: center;
+        animation: mvFloat3 4s ease-in-out infinite 1.6s;
+        border-color: rgba(124, 58, 237, 0.4);
+      }
+      @keyframes mvFloat1 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes mvFloat2 {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(8px);
+        }
+      }
+      @keyframes mvFloat3 {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -52%) scale(1.03);
+        }
+      }
+      .mv-lbl {
+        font-size: 0.7rem;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+      }
+      .mv-val {
+        font-family: var(--fd);
+        font-size: 1.5rem;
+        font-weight: 800;
+      }
+      .mv-sub {
+        font-size: 0.75rem;
+        color: var(--text2);
+        margin-top: 0.2rem;
+      }
+      .mv-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Values */
+      .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.25rem;
+      }
+      .value-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+      }
+      .value-card:hover {
+        border-color: rgba(124, 58, 237, 0.3);
+        transform: translateY(-4px);
+      }
+      .value-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--grad);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .value-card:hover::before {
+        opacity: 1;
+      }
+      .value-num {
+        font-family: var(--fd);
+        font-size: 3rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        opacity: 0.07;
+        position: absolute;
+        top: 0.75rem;
+        right: 1rem;
+        line-height: 1;
+      }
+      .value-icon {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+      .value-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .value-card p {
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+
+      /* Team */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+      }
+      .team-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--rl);
+        padding: 1.75rem 1.5rem;
+        text-align: center;
+        transition:
+          border-color 0.25s,
+          transform 0.25s,
+          box-shadow 0.25s;
+        cursor: default;
+      }
+      .team-card:hover {
+        border-color: rgba(124, 58, 237, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      .team-avatar {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: var(--grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #fff;
+        margin: 0 auto 1rem;
+        position: relative;
+      }
+      .team-avatar::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        background: var(--grad) border-box;
+        -webkit-mask:
+          linear-gradient(#fff 0 0) padding-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .team-card:hover .team-avatar::after {
+        opacity: 1;
+      }
+      .team-name {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+      .team-role {
+        font-size: 0.8rem;
+        color: var(--accent);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      .team-bio {
+        font-size: 0.82rem;
+        color: var(--text3);
+        line-height: 1.5;
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 24px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(124, 58, 237, 0.5) 10%,
+          rgba(236, 72, 153, 0.5) 90%,
+          transparent
+        );
+      }
+      .tl-item {
+        display: flex;
+        gap: 2rem;
+        padding: 0 0 3rem 0;
+        position: relative;
+      }
+      .tl-dot {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--grad);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: #fff;
+        box-shadow:
+          0 0 0 4px var(--bg2),
+          0 0 0 6px rgba(124, 58, 237, 0.25);
+      }
+      .tl-content {
+        padding-top: 0.75rem;
+      }
+      .tl-year {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #a78bfa;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.35rem;
+      }
+      .tl-content h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+      .tl-content p {
+        font-size: 0.9rem;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        padding: 4rem clamp(1.25rem, 5vw, 5rem) 2rem;
+      }
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+      .footer-desc {
+        margin-top: 0.75rem;
+        color: var(--text2);
+        font-size: 0.875rem;
+        line-height: 1.7;
+        max-width: 240px;
+      }
+      .footer-social {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+      }
+      .fsoc {
+        width: 34px;
+        height: 34px;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: var(--rs);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text2);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+      }
+      .fsoc:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .fcol h4 {
+        font-family: var(--fd);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 1rem;
+      }
+      .fcol a {
+        display: block;
+        color: var(--text2);
+        font-size: 0.875rem;
+        cursor: pointer;
+        margin-bottom: 0.6rem;
+        transition: color 0.2s;
+      }
+      .fcol a:hover {
+        color: var(--text);
+      }
+      .footer-btm {
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-btm p {
+        color: var(--text3);
+        font-size: 0.8rem;
+      }
+      .footer-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .footer-links a {
+        color: var(--text3);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--text2);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .pricing-grid {
+          grid-template-columns: 1fr;
+          max-width: 420px;
+          margin: 0 auto;
+        }
+        .plan-card.popular {
+          transform: scale(1);
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+        .hiw-grid {
+          grid-template-columns: 1fr;
+        }
+        .hiw-line {
+          display: none;
+        }
+        .testi-card {
+          width: 100%;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .mission-inner {
+          grid-template-columns: 1fr;
+        }
+        .mission-visual {
+          display: none;
+        }
+      }
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-signin {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .stat-num {
+          font-size: clamp(1.4rem, 5vw, 2rem);
+        }
+      }
+      @media (max-width: 600px) {
+        .dash-body {
+          grid-template-columns: 1fr 1fr;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-btm {
+          flex-direction: column;
+          text-align: center;
+        }
+        .stat-num {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ NAVBAR ══ -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-logo" onclick="navigate('home')">
+        <div class="logo-mark">
+          <svg viewBox="0 0 18 18" fill="none">
+            <rect
+              x="1"
+              y="1"
+              width="7"
+              height="7"
+              rx="2"
+              fill="white"
+              opacity=".9"
+            />
+            <rect
+              x="10"
+              y="1"
+              width="7"
+              height="7"
+              rx="2"
+              fill="white"
+              opacity=".6"
+            />
+            <rect
+              x="1"
+              y="10"
+              width="7"
+              height="7"
+              rx="2"
+              fill="white"
+              opacity=".6"
+            />
+            <rect
+              x="10"
+              y="10"
+              width="7"
+              height="7"
+              rx="2"
+              fill="white"
+              opacity=".3"
+            />
+          </svg>
+        </div>
+        Flow<span class="grad-text">desk</span>
+      </div>
+      <ul class="nav-links">
+        <li>
+          <a class="nav-link active" data-page="home" onclick="navigate('home')"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="nav-link"
+            data-page="features"
+            onclick="navigate('features')"
+            >Features</a
+          >
+        </li>
+        <li>
+          <a class="nav-link" data-page="pricing" onclick="navigate('pricing')"
+            >Pricing</a
+          >
+        </li>
+        <li>
+          <a class="nav-link" data-page="about" onclick="navigate('about')"
+            >About</a
+          >
+        </li>
+        <li>
+          <a class="nav-link" data-page="contact" onclick="navigate('contact')"
+            >Contact</a
+          >
+        </li>
+      </ul>
+      <div class="nav-right">
+        <span class="nav-signin" onclick="navigate('contact')">Sign in</span>
+        <button class="btn-nav" onclick="navigate('pricing')">
+          Get Started
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 13 13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" />
+          </svg>
+        </button>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a
+        class="nav-link"
+        data-page="home"
+        onclick="
+          navigate('home');
+          closeMobile();
+        "
+        >Home</a
+      >
+      <a
+        class="nav-link"
+        data-page="features"
+        onclick="
+          navigate('features');
+          closeMobile();
+        "
+        >Features</a
+      >
+      <a
+        class="nav-link"
+        data-page="pricing"
+        onclick="
+          navigate('pricing');
+          closeMobile();
+        "
+        >Pricing</a
+      >
+      <a
+        class="nav-link"
+        data-page="about"
+        onclick="
+          navigate('about');
+          closeMobile();
+        "
+        >About</a
+      >
+      <a
+        class="nav-link"
+        data-page="contact"
+        onclick="
+          navigate('contact');
+          closeMobile();
+        "
+        >Contact</a
+      >
+      <a
+        class="mobile-cta"
+        onclick="
+          navigate('pricing');
+          closeMobile();
+        "
+        >Get Started →</a
+      >
+    </div>
+
+    <!-- ══════════════════════════════
+     HOME PAGE
+══════════════════════════════ -->
+    <div class="page active" id="page-home">
+      <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-glow2"></div>
+
+        <div class="hero-badge-wrap reveal">
+          <div class="badge">
+            <span class="badge-dot"></span>Now in public beta — free to start
+          </div>
+        </div>
+
+        <h1 class="reveal d1">
+          Your team's<br /><span class="grad-text">command center</span>
+        </h1>
+        <p class="hero-sub reveal d2">
+          Flowdesk brings your tasks, projects, and team together in one focused
+          workspace. Move faster, stress less, ship more.
+        </p>
+
+        <div class="hero-btns reveal d3">
+          <button class="btn btn-primary btn-lg" onclick="navigate('pricing')">
+            Start for free
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 7h8M8 4l3 3-3 3" />
+            </svg>
+          </button>
+          <button class="btn btn-ghost btn-lg" onclick="navigate('features')">
+            See features
+          </button>
+        </div>
+
+        <p class="hero-notice reveal d4">
+          No credit card required &nbsp;·&nbsp; Free plan forever &nbsp;·&nbsp;
+          Set up in 2 minutes
+        </p>
+
+        <div class="hero-dash reveal" style="transition-delay: 0.5s">
+          <div class="dash-topbar">
+            <div class="dd r"></div>
+            <div class="dd y"></div>
+            <div class="dd g"></div>
+            <span class="dash-title-txt">Flowdesk — Q4 Sprint Dashboard</span>
+          </div>
+          <div class="dash-body">
+            <div class="dstat">
+              <div class="dstat-lbl">Tasks Done</div>
+              <div class="dstat-val p" data-target="1284" data-suffix="">0</div>
+              <div class="dstat-chg">↑ 12% this week</div>
+            </div>
+            <div class="dstat">
+              <div class="dstat-lbl">Active Members</div>
+              <div class="dstat-val pk" data-target="24" data-suffix="">0</div>
+              <div class="dstat-chg">↑ 3 joined today</div>
+            </div>
+            <div class="dstat">
+              <div class="dstat-lbl">Sprint Progress</div>
+              <div class="dstat-val g" data-target="94" data-suffix="%">0</div>
+              <div class="dstat-chg">↑ On track</div>
+            </div>
+            <div class="dchart">
+              <div class="dchart-hdr">
+                <span class="dchart-title">Weekly Output</span>
+                <div class="dchart-legend">
+                  <div class="dleg">
+                    <div class="dleg-dot p"></div>
+                    Completed
+                  </div>
+                  <div class="dleg">
+                    <div class="dleg-dot pk"></div>
+                    In Progress
+                  </div>
+                </div>
+              </div>
+              <div class="dbars">
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 40%"></div>
+                  <div class="dbar b" style="height: 25%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 55%"></div>
+                  <div class="dbar b" style="height: 35%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 45%"></div>
+                  <div class="dbar b" style="height: 30%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 70%"></div>
+                  <div class="dbar b" style="height: 45%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 60%"></div>
+                  <div class="dbar b" style="height: 40%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 90%"></div>
+                  <div class="dbar b" style="height: 55%"></div>
+                </div>
+                <div class="dbar-grp">
+                  <div class="dbar a" style="height: 75%"></div>
+                  <div class="dbar b" style="height: 50%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="dtasks">
+              <div class="dtasks-hdr">
+                <span>Recent Tasks</span
+                ><span style="color: var(--accent); cursor: pointer"
+                  >View all →</span
+                >
+              </div>
+              <div class="dtask-row">
+                <div class="tstatus done"></div>
+                <span class="tname">Redesign onboarding flow</span
+                ><span class="ttag green">Done</span>
+              </div>
+              <div class="dtask-row">
+                <div class="tstatus prog"></div>
+                <span class="tname">API rate limiting implementation</span
+                ><span class="ttag purple">In Progress</span>
+              </div>
+              <div class="dtask-row">
+                <div class="tstatus prog"></div>
+                <span class="tname">Q4 investor report draft</span
+                ><span class="ttag pink">Review</span>
+              </div>
+              <div class="dtask-row">
+                <div class="tstatus pend"></div>
+                <span class="tname">Set up staging environment</span
+                ><span class="ttag grey">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="stats-bar">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="reveal">
+              <div
+                class="stat-num grad-text"
+                data-target="50000"
+                data-suffix="+"
+              >
+                0
+              </div>
+              <div class="stat-lbl">Teams using Flowdesk</div>
+            </div>
+            <div class="reveal d1">
+              <div
+                class="stat-num grad-text"
+                data-target="2000000"
+                data-suffix="+"
+              >
+                0
+              </div>
+              <div class="stat-lbl">Tasks completed</div>
+            </div>
+            <div class="reveal d2">
+              <div
+                class="stat-num grad-text"
+                data-target="99"
+                data-suffix=".9%"
+              >
+                0
+              </div>
+              <div class="stat-lbl">Uptime SLA</div>
+            </div>
+            <div class="reveal d3">
+              <div class="stat-num grad-text" data-target="4" data-suffix=".9★">
+                0
+              </div>
+              <div class="stat-lbl">Average rating</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features overview with animated icons -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">Everything you need</div>
+            <h2 class="section-title reveal d1">
+              Built for how teams<br /><span class="grad-text"
+                >actually work</span
+              >
+            </h2>
+            <p class="section-sub reveal d2">
+              No bloat, no complexity. Just the tools your team needs to focus,
+              ship, and win.
+            </p>
+          </div>
+          <div class="feat-grid">
+            <!-- Task Management — 4 squares pulsing in sequence -->
+            <div class="feat-card reveal">
+              <div class="feat-icon">
+                <svg viewBox="0 0 24 24" class="icon-task">
+                  <rect
+                    class="sq1"
+                    x="3"
+                    y="3"
+                    width="7"
+                    height="7"
+                    rx="1"
+                    fill="#a78bfa"
+                    stroke="none"
+                  />
+                  <rect
+                    class="sq2"
+                    x="14"
+                    y="3"
+                    width="7"
+                    height="7"
+                    rx="1"
+                    fill="#a78bfa"
+                    stroke="none"
+                  />
+                  <rect
+                    class="sq3"
+                    x="3"
+                    y="14"
+                    width="7"
+                    height="7"
+                    rx="1"
+                    fill="#a78bfa"
+                    stroke="none"
+                  />
+                  <rect
+                    class="sq4"
+                    x="14"
+                    y="14"
+                    width="7"
+                    height="7"
+                    rx="1"
+                    fill="#a78bfa"
+                    stroke="none"
+                  />
+                </svg>
+              </div>
+              <h3>Task Management</h3>
+              <p>
+                Create, assign, and track tasks with custom statuses,
+                priorities, and due dates across every project.
+              </p>
+            </div>
+
+            <!-- Team Collaboration — orbit dots around a person silhouette -->
+            <div class="feat-card reveal d1">
+              <div class="feat-icon">
+                <svg viewBox="0 0 24 24" class="icon-team" overflow="visible">
+                  <!-- Person body -->
+                  <circle
+                    class="head"
+                    cx="9"
+                    cy="7"
+                    r="4"
+                    stroke="#a78bfa"
+                    fill="none"
+                  />
+                  <path
+                    d="M1 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"
+                    stroke="#a78bfa"
+                    fill="none"
+                  />
+                  <!-- Orbiting dots -->
+                  <circle
+                    class="orbit-dot1"
+                    cx="19"
+                    cy="7"
+                    r="2"
+                    fill="#EC4899"
+                  />
+                  <circle
+                    class="orbit-dot2"
+                    cx="19"
+                    cy="7"
+                    r="1.5"
+                    fill="#7C3AED"
+                  />
+                </svg>
+              </div>
+              <h3>Team Collaboration</h3>
+              <p>
+                Comment, mention, and collaborate directly on tasks. Keep all
+                conversations where the work lives.
+              </p>
+            </div>
+
+            <!-- Analytics — wave that draws itself -->
+            <div class="feat-card reveal d2">
+              <div class="feat-icon">
+                <svg viewBox="0 0 24 24" class="icon-analytics">
+                  <polyline
+                    class="wave"
+                    points="22 12 18 12 15 21 9 3 6 12 2 12"
+                    stroke="#a78bfa"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+              <h3>Real-time Analytics</h3>
+              <p>
+                Track velocity, sprint progress, and performance with dashboards
+                that surface what matters most.
+              </p>
+            </div>
+
+            <!-- Integrations — rotating link rings -->
+            <div class="feat-card reveal d3">
+              <div class="feat-icon">
+                <svg viewBox="0 0 24 24" class="icon-link" overflow="visible">
+                  <path
+                    class="ring1"
+                    d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                    stroke="#a78bfa"
+                    fill="none"
+                  />
+                  <path
+                    class="ring2"
+                    d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                    stroke="#EC4899"
+                    fill="none"
+                  />
+                  <circle
+                    class="link-line"
+                    cx="12"
+                    cy="12"
+                    r="1.5"
+                    fill="#a78bfa"
+                  />
+                </svg>
+              </div>
+              <h3>50+ Integrations</h3>
+              <p>
+                Connect Slack, GitHub, Figma, Notion, and more. Flowdesk fits
+                inside your existing stack.
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 2.5rem" class="reveal">
+            <button class="btn btn-ghost" onclick="navigate('features')">
+              Explore all features →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section class="section hiw">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">Simple by design</div>
+            <h2 class="section-title reveal d1">
+              Up and running<br /><span class="grad-text">in minutes</span>
+            </h2>
+          </div>
+          <div class="hiw-grid">
+            <div class="hiw-line"></div>
+            <div class="hiw-step reveal">
+              <div class="step-num">1</div>
+              <h3>Create your workspace</h3>
+              <p>
+                Sign up free, invite your team, and set up your first project in
+                under 2 minutes.
+              </p>
+            </div>
+            <div class="hiw-step reveal d2">
+              <div class="step-num">2</div>
+              <h3>Add tasks & assign work</h3>
+              <p>
+                Break projects into tasks, set priorities, due dates, and assign
+                to team members instantly.
+              </p>
+            </div>
+            <div class="hiw-step reveal d4">
+              <div class="step-num">3</div>
+              <h3>Track & ship together</h3>
+              <p>
+                Monitor progress in real time and keep your whole team aligned
+                on every sprint.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">Loved by teams</div>
+            <h2 class="section-title reveal d1">
+              Teams that <span class="grad-text">swear by it</span>
+            </h2>
+          </div>
+          <div class="testi-wrap reveal">
+            <div class="testi-track" id="testiTrack">
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">
+                  "We switched from Jira and never looked back. Flowdesk is what
+                  productivity software should feel like — clean, fast, and
+                  actually enjoyable."
+                </p>
+                <div class="testi-author">
+                  <div class="tav">AO</div>
+                  <div>
+                    <div class="taname">Adaeze Okonkwo</div>
+                    <div class="tarole">Engineering Lead, Paystack</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">
+                  "The analytics dashboard alone is worth it. I can see sprint
+                  bottlenecks before they become problems. Complete game changer
+                  for our team."
+                </p>
+                <div class="testi-author">
+                  <div class="tav">MN</div>
+                  <div>
+                    <div class="taname">Marcus Nielsen</div>
+                    <div class="tarole">CTO, Stride Labs</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-quote">
+                  "Our remote team across 4 time zones finally feels
+                  coordinated. Real-time sync keeps everyone on the same page
+                  without the noise."
+                </p>
+                <div class="testi-author">
+                  <div class="tav">PL</div>
+                  <div>
+                    <div class="taname">Priya Lal</div>
+                    <div class="tarole">Head of Product, Crunchbase</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testi-controls">
+            <button class="tbtn" id="testiPrev">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M10 3L5 8l5 5" />
+              </svg>
+            </button>
+            <div class="tdots">
+              <div class="tdot active"></div>
+              <div class="tdot"></div>
+              <div class="tdot"></div>
+            </div>
+            <button class="tbtn" id="testiNext">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M6 3l5 5-5 5" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-banner">
+        <div class="container">
+          <div class="section-label reveal">Ready?</div>
+          <h2 class="cta-title reveal d1">
+            Stop managing chaos.<br /><span class="grad-text"
+              >Start shipping.</span
+            >
+          </h2>
+          <p class="cta-sub reveal d2">
+            Join 50,000+ teams already using Flowdesk. Free forever, no credit
+            card required.
+          </p>
+          <div class="cta-btns reveal d3">
+            <button
+              class="btn btn-primary btn-lg"
+              onclick="navigate('pricing')"
+            >
+              Get started free →
+            </button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('contact')">
+              Talk to sales
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════════════
+     FEATURES PAGE
+══════════════════════════════ -->
+    <div class="page" id="page-features">
+      <div class="page-hero">
+        <div class="section-label" style="margin-bottom: 1rem">Product</div>
+        <h1>
+          Everything your team<br /><span class="grad-text">needs to win</span>
+        </h1>
+        <p>
+          A full operating system for how modern teams work, communicate, and
+          ship.
+        </p>
+      </div>
+      <section class="section" style="padding-top: 0">
+        <div class="container">
+          <div class="feat-tabs">
+            <button class="ftab active" onclick="switchTab('productivity')">
+              Productivity
+            </button>
+            <button class="ftab" onclick="switchTab('collaboration')">
+              Collaboration
+            </button>
+            <button class="ftab" onclick="switchTab('analytics')">
+              Analytics
+            </button>
+            <button class="ftab" onclick="switchTab('automation')">
+              Automation
+            </button>
+          </div>
+          <div class="ftab-panel active" id="tab-productivity">
+            <div class="fbig-card reveal">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+              </div>
+              <h3>Smart Task Management</h3>
+              <p>Flexible views, custom fields, and deep priority controls.</p>
+              <ul>
+                <li>Kanban, List & Calendar views</li>
+                <li>Custom task fields & templates</li>
+                <li>Recurring tasks & automations</li>
+                <li>Due dates, reminders & dependencies</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d1">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+              </div>
+              <h3>Project Boards</h3>
+              <p>Drag-and-drop boards that adapt to your team's workflow.</p>
+              <ul>
+                <li>Multi-project overview</li>
+                <li>Drag & drop task movement</li>
+                <li>Sprint planning tools</li>
+                <li>Milestone tracking</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d2">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <h3>Time & Focus Tools</h3>
+              <p>Built-in time tracking and focus modes for deep work.</p>
+              <ul>
+                <li>Session-based time tracking</li>
+                <li>Focus mode & distraction blocking</li>
+                <li>Pomodoro timer integration</li>
+                <li>Billable hours reporting</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ftab-panel" id="tab-collaboration">
+            <div class="fbig-card reveal">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path
+                    d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+                  />
+                </svg>
+              </div>
+              <h3>Team Workspaces</h3>
+              <p>Dedicated spaces with fine-grained permission controls.</p>
+              <ul>
+                <li>Role-based access control</li>
+                <li>Guest & contractor access</li>
+                <li>Team-level notifications</li>
+                <li>Shared project templates</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d1">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                  />
+                </svg>
+              </div>
+              <h3>Threaded Comments</h3>
+              <p>Every task has its own conversation thread.</p>
+              <ul>
+                <li>@mentions & notifications</li>
+                <li>Emoji reactions</li>
+                <li>File attachments inline</li>
+                <li>Resolution tracking</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d2">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                  />
+                  <path
+                    d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                  />
+                </svg>
+              </div>
+              <h3>50+ Integrations</h3>
+              <p>Flowdesk plays well with tools your team already loves.</p>
+              <ul>
+                <li>Slack, Teams & Discord</li>
+                <li>GitHub, GitLab & Bitbucket</li>
+                <li>Figma, Notion & Google Drive</li>
+                <li>Zapier & custom webhooks</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ftab-panel" id="tab-analytics">
+            <div class="fbig-card reveal">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+              </div>
+              <h3>Live Dashboards</h3>
+              <p>Real-time visibility into every project, sprint, and team.</p>
+              <ul>
+                <li>Velocity & burndown charts</li>
+                <li>Sprint health scores</li>
+                <li>Individual performance views</li>
+                <li>Export to PDF & CSV</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d1">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+              </div>
+              <h3>Team Reports</h3>
+              <p>Automated weekly reports on where time actually goes.</p>
+              <ul>
+                <li>Automated weekly summaries</li>
+                <li>Workload distribution views</li>
+                <li>Deadline adherence tracking</li>
+                <li>Capacity planning tools</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d2">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </div>
+              <h3>Custom Reports</h3>
+              <p>Drag-and-drop report builders for any stakeholder.</p>
+              <ul>
+                <li>Custom date ranges & filters</li>
+                <li>Scheduled email delivery</li>
+                <li>Shareable report links</li>
+                <li>White-label exports</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ftab-panel" id="tab-automation">
+            <div class="fbig-card reveal">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </div>
+              <h3>Smart Automations</h3>
+              <p>Set rules and let Flowdesk handle the repetitive work.</p>
+              <ul>
+                <li>If-this-then-that rule builder</li>
+                <li>Status change triggers</li>
+                <li>Auto-assign by workload</li>
+                <li>Due date automations</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d1">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <h3>Workflow Templates</h3>
+              <p>30+ pre-built workflows for every team type.</p>
+              <ul>
+                <li>Engineering, design, marketing</li>
+                <li>Save custom workflows</li>
+                <li>Share across workspaces</li>
+                <li>One-click project setup</li>
+              </ul>
+            </div>
+            <div class="fbig-card reveal d2">
+              <div class="fbig-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M18 20V10M12 20V4M6 20v-6" />
+                </svg>
+              </div>
+              <h3>API & Webhooks</h3>
+              <p>Build custom integrations with our full REST API.</p>
+              <ul>
+                <li>Full REST API access</li>
+                <li>Real-time webhooks</li>
+                <li>OAuth 2.0 authentication</li>
+                <li>Sandbox environment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Integrations with animated SVG icons -->
+      <section
+        class="section"
+        style="background: var(--bg2); border-top: 1px solid var(--border)"
+      >
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">Works with your stack</div>
+            <h2 class="section-title reveal d1">
+              Connect everything<br /><span class="grad-text"
+                >you already use</span
+              >
+            </h2>
+          </div>
+          <div class="integrations-grid reveal">
+            <div class="integration-chip chip-slack">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path d="M13.5 20.5a2 2 0 1 1-2-2h2v2z" fill="#E01E5A" />
+                  <path
+                    d="M14.5 20.5a2 2 0 0 1 4 0v5a2 2 0 0 1-4 0v-5z"
+                    fill="#E01E5A"
+                  />
+                  <path d="M16.5 13.5a2 2 0 1 1 2-2v2h-2z" fill="#36C5F0" />
+                  <path
+                    d="M16.5 14.5a2 2 0 0 1 0 4h-5a2 2 0 0 1 0-4h5z"
+                    fill="#36C5F0"
+                  />
+                  <path d="M23.5 16.5a2 2 0 1 1 2 2h-2v-2z" fill="#2EB67D" />
+                  <path
+                    d="M22.5 16.5a2 2 0 0 1-4 0v-5a2 2 0 0 1 4 0v5z"
+                    fill="#2EB67D"
+                  />
+                  <path d="M20.5 23.5a2 2 0 1 1-2 2v-2h2z" fill="#ECB22E" />
+                  <path
+                    d="M20.5 22.5a2 2 0 0 1 0-4h5a2 2 0 0 1 0 4h-5z"
+                    fill="#ECB22E"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Slack</div>
+            </div>
+
+            <div class="integration-chip chip-github">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M18 7C12.477 7 8 11.477 8 17c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 18 12.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C25.138 25.163 28 21.418 28 17c0-5.523-4.477-10-10-10z"
+                    fill="#a78bfa"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">GitHub</div>
+            </div>
+
+            <div class="integration-chip chip-figma">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    d="M14 26a3 3 0 0 0 3-3v-3h-3a3 3 0 0 0 0 6z"
+                    fill="#0ACF83"
+                  />
+                  <path
+                    d="M11 17a3 3 0 0 1 3-3h3v6h-3a3 3 0 0 1-3-3z"
+                    fill="#A259FF"
+                  />
+                  <path
+                    d="M11 11a3 3 0 0 1 3-3h3v6h-3a3 3 0 0 1-3-3z"
+                    fill="#F24E1E"
+                  />
+                  <path d="M17 8h3a3 3 0 0 1 0 6h-3V8z" fill="#FF7262" />
+                  <path
+                    d="M23 17a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
+                    fill="#1ABCFE"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Figma</div>
+            </div>
+
+            <div class="integration-chip chip-notion">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    d="M10.5 10.5h9l7 7v8.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-14.5a1 1 0 0 1 1-1z"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M19.5 10.5v7h7"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  />
+                  <line
+                    x1="13"
+                    y1="19"
+                    x2="21"
+                    y2="19"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="13"
+                    y1="22"
+                    x2="19"
+                    y2="22"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Notion</div>
+            </div>
+
+            <div class="integration-chip chip-gdrive">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path d="M13 27l4-7h10l-4 7H13z" fill="#FBBC05" />
+                  <path d="M8 20l4-7 5 9-4 5-5-7z" fill="#34A853" />
+                  <path
+                    d="M13 27L8 20l9-13h5L13 27z"
+                    fill="#EA4335"
+                    opacity=".8"
+                  />
+                  <path d="M17 7h5l5 8.5h-10L17 7z" fill="#4285F4" />
+                  <path
+                    d="M27 15.5l-4 6.5H13l4-6.5h10z"
+                    fill="#FBBC05"
+                    opacity=".6"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Google Drive</div>
+            </div>
+
+            <div class="integration-chip chip-gmail">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    d="M9 12h18v14a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1V12z"
+                    fill="#EA4335"
+                    opacity=".15"
+                  />
+                  <path
+                    d="M9 12l9 8 9-8"
+                    stroke="#EA4335"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <rect
+                    x="9"
+                    y="12"
+                    width="18"
+                    height="14"
+                    rx="1"
+                    stroke="#EA4335"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Gmail</div>
+            </div>
+
+            <div class="integration-chip chip-zapier">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    d="M18 9l2.5 6.5H27l-5.5 4 2 6.5L18 22l-5.5 4 2-6.5L9 15.5h6.5L18 9z"
+                    fill="#FF4A00"
+                    stroke="#FF4A00"
+                    stroke-width=".5"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name">Zapier</div>
+            </div>
+
+            <div class="integration-chip chip-gitlab">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path d="M18 27l4.5-13.5h-9L18 27z" fill="#E24329" />
+                  <path d="M18 27L13.5 13.5H9L18 27z" fill="#FC6D26" />
+                  <path
+                    d="M9 13.5l-1.5 5 1.5 4.5L18 27 9 13.5z"
+                    fill="#FCA326"
+                  />
+                  <path d="M18 27l4.5-13.5H27L18 27z" fill="#FC6D26" />
+                  <path
+                    d="M27 13.5l1.5 5-1.5 4.5L18 27l9-13.5z"
+                    fill="#FCA326"
+                  />
+                  <path d="M22.5 13.5h-9L15 9l7.5 4.5z" fill="#E24329" />
+                </svg>
+              </div>
+              <div class="chip-name">GitLab</div>
+            </div>
+
+            <div class="integration-chip chip-jira">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path
+                    d="M27.5 18L18 8.5l-2.5 2.5 7 7-7 7L18 27.5 27.5 18z"
+                    fill="#2684FF"
+                  />
+                  <path
+                    d="M8.5 18L13 13.5 18 18.5 13 23.5 8.5 18z"
+                    fill="#2684FF"
+                    opacity=".6"
+                  />
+                  <circle cx="18" cy="18" r="2.5" fill="#2684FF" />
+                </svg>
+              </div>
+              <div class="chip-name">Jira</div>
+            </div>
+
+            <div class="integration-chip chip-linear">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <path d="M9 22.5L13.5 27H9v-4.5z" fill="#5E6AD2" />
+                  <path d="M9 17.5L18.5 27H15L9 21v-3.5z" fill="#5E6AD2" />
+                  <path d="M9 12.5L23.5 27H20L9 16v-3.5z" fill="#5E6AD2" />
+                  <path d="M10 9l17 17h-3L9.5 11.5 10 9z" fill="#5E6AD2" />
+                  <path d="M13.5 9L27 22.5V26L11 10l2.5-1z" fill="#5E6AD2" />
+                  <path d="M18.5 9L27 17.5V21L15 9h3.5z" fill="#5E6AD2" />
+                  <path d="M23.5 9L27 12.5V16L20 9h3.5z" fill="#5E6AD2" />
+                </svg>
+              </div>
+              <div class="chip-name">Linear</div>
+            </div>
+
+            <div class="integration-chip chip-teams">
+              <div class="chip-svg">
+                <svg viewBox="0 0 36 36" fill="none">
+                  <rect width="36" height="36" rx="8" fill="#1a1a1a" />
+                  <rect
+                    x="9"
+                    y="9"
+                    width="18"
+                    height="18"
+                    rx="4"
+                    fill="#5059C9"
+                  />
+                  <path
+                    d="M22 18a4 4 0 1 0-4-4"
+                    stroke="white"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="18" cy="21" r="3" fill="white" opacity=".8" />
+                </svg>
+              </div>
+              <div class="chip-name">MS Teams</div>
+            </div>
+
+            <div
+              class="integration-chip chip-more"
+              style="
+                border-style: dashed;
+                border-color: rgba(124, 58, 237, 0.3);
+              "
+            >
+              <div
+                class="chip-svg"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <svg viewBox="0 0 36 36" fill="none">
+                  <circle
+                    cx="18"
+                    cy="18"
+                    r="17"
+                    stroke="rgba(124,58,237,.4)"
+                    stroke-width="1.5"
+                    stroke-dasharray="4 3"
+                  />
+                  <line
+                    x1="18"
+                    y1="12"
+                    x2="18"
+                    y2="24"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="12"
+                    y1="18"
+                    x2="24"
+                    y2="18"
+                    stroke="#a78bfa"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="chip-name" style="color: #a78bfa">+ 39 more</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-banner">
+        <div class="container">
+          <h2 class="cta-title reveal">
+            Ready to see it in action?<br /><span class="grad-text"
+              >Start free today.</span
+            >
+          </h2>
+          <p class="cta-sub reveal d1">
+            No contracts. No credit card. Cancel anytime.
+          </p>
+          <div class="cta-btns reveal d2">
+            <button
+              class="btn btn-primary btn-lg"
+              onclick="navigate('pricing')"
+            >
+              View pricing →
+            </button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('contact')">
+              Book a demo
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════════════
+     PRICING PAGE
+══════════════════════════════ -->
+    <div class="page" id="page-pricing">
+      <div class="page-hero">
+        <div class="section-label" style="margin-bottom: 1rem">Pricing</div>
+        <h1>Simple, honest<br /><span class="grad-text">pricing</span></h1>
+        <p>
+          Start free. Scale as you grow. No hidden fees, no surprises — ever.
+        </p>
+      </div>
+      <section class="section" style="padding-top: 0">
+        <div class="container">
+          <div class="pricing-toggle">
+            <span class="toggle-label active" id="monthly-lbl">Monthly</span>
+            <div
+              class="toggle-switch"
+              id="billingToggle"
+              onclick="toggleBilling()"
+            >
+              <div class="toggle-knob"></div>
+            </div>
+            <span class="toggle-label" id="annual-lbl">Annual</span>
+            <span
+              class="annual-badge"
+              id="save-badge"
+              style="opacity: 0; transition: opacity 0.3s"
+              >Save 20%</span
+            >
+          </div>
+          <div class="pricing-grid reveal">
+            <div class="plan-card">
+              <div class="plan-name">Free</div>
+              <div class="plan-price">
+                <sup>$</sup><span id="price-free">0</span><span>/mo</span>
+              </div>
+              <p class="plan-desc" style="margin-top: 0.75rem">
+                Perfect for individuals and small teams just getting started
+                with project management.
+              </p>
+              <ul class="plan-features">
+                <li><span class="pcheck">✓</span>Up to 5 members</li>
+                <li><span class="pcheck">✓</span>3 active projects</li>
+                <li><span class="pcheck">✓</span>Basic task management</li>
+                <li><span class="pcheck">✓</span>5GB storage</li>
+                <li><span class="pcheck">✓</span>Community support</li>
+              </ul>
+              <button class="plan-btn outline" onclick="handlePlan('Free')">
+                Get started free
+              </button>
+            </div>
+            <div class="plan-card popular">
+              <div class="plan-name">Pro</div>
+              <div class="plan-price">
+                <sup>$</sup><span id="price-pro">19</span
+                ><span>/mo per user</span>
+              </div>
+              <p class="plan-desc" style="margin-top: 0.75rem">
+                For growing teams that need more power, integrations, and
+                actionable insights.
+              </p>
+              <ul class="plan-features">
+                <li><span class="pcheck">✓</span>Unlimited members</li>
+                <li><span class="pcheck">✓</span>Unlimited projects</li>
+                <li><span class="pcheck">✓</span>Advanced analytics</li>
+                <li><span class="pcheck">✓</span>50+ integrations</li>
+                <li><span class="pcheck">✓</span>50GB storage</li>
+                <li><span class="pcheck">✓</span>Priority support</li>
+              </ul>
+              <button class="plan-btn primary" onclick="handlePlan('Pro')">
+                Start Pro trial →
+              </button>
+            </div>
+            <div class="plan-card">
+              <div class="plan-name">Enterprise</div>
+              <div class="plan-price">
+                <sup>$</sup><span id="price-ent">79</span
+                ><span>/mo per user</span>
+              </div>
+              <p class="plan-desc" style="margin-top: 0.75rem">
+                For large organizations that need enterprise security,
+                compliance, and dedicated support.
+              </p>
+              <ul class="plan-features">
+                <li><span class="pcheck">✓</span>Everything in Pro</li>
+                <li><span class="pcheck">✓</span>SSO & SAML</li>
+                <li><span class="pcheck">✓</span>Advanced security</li>
+                <li><span class="pcheck">✓</span>Custom integrations</li>
+                <li><span class="pcheck">✓</span>Unlimited storage</li>
+                <li><span class="pcheck">✓</span>Dedicated account manager</li>
+              </ul>
+              <button
+                class="plan-btn outline"
+                onclick="handlePlan('Enterprise')"
+              >
+                Contact sales
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section faq-section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">FAQs</div>
+            <h2 class="section-title reveal d1">
+              Questions we<br /><span class="grad-text"
+                >actually get asked</span
+              >
+            </h2>
+          </div>
+          <div class="faq-list reveal">
+            <div class="faq-item">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Can I switch plans at any time?</span>
+                <div class="faq-icon">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <path d="M6 1v10M1 6h10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="faq-a">
+                <div class="faq-a-inner">
+                  Yes, absolutely. You can upgrade, downgrade, or cancel at any
+                  time from your settings. Upgrades are prorated. Downgrades
+                  take effect at end of your billing cycle.
+                </div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Is there a free trial for paid plans?</span>
+                <div class="faq-icon">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <path d="M6 1v10M1 6h10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="faq-a">
+                <div class="faq-a-inner">
+                  Every paid plan comes with a 14-day free trial, no credit card
+                  required. Full access to all features. After 14 days, choose
+                  to subscribe or downgrade to free.
+                </div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                <span>What happens to my data if I cancel?</span>
+                <div class="faq-icon">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <path d="M6 1v10M1 6h10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="faq-a">
+                <div class="faq-a-inner">
+                  Data stays in read-only mode for 30 days. Export everything
+                  within that window. After 30 days, data is permanently
+                  deleted.
+                </div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Do you offer discounts for nonprofits?</span>
+                <div class="faq-icon">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <path d="M6 1v10M1 6h10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="faq-a">
+                <div class="faq-a-inner">
+                  Yes — 50% off for registered nonprofits and educational
+                  institutions. Reach out via Contact with proof of status.
+                </div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Is Flowdesk secure?</span>
+                <div class="faq-icon">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  >
+                    <path d="M6 1v10M1 6h10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="faq-a">
+                <div class="faq-a-inner">
+                  All data encrypted at rest (AES-256) and in transit (TLS 1.3).
+                  SOC 2 Type II certified, GDPR compliant, hosted on AWS.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════════════
+     ABOUT PAGE
+══════════════════════════════ -->
+    <div class="page" id="page-about">
+      <div class="page-hero">
+        <div class="section-label" style="margin-bottom: 1rem">Our Story</div>
+        <h1>
+          Built by a team that was<br /><span class="grad-text"
+            >tired of bad tools</span
+          >
+        </h1>
+        <p>
+          Flowdesk started as an internal fix. It became something 50,000+ teams
+          now depend on every day.
+        </p>
+      </div>
+
+      <!-- Mission -->
+      <section class="section about-mission">
+        <div class="container">
+          <div class="mission-inner">
+            <div class="mission-text reveal">
+              <div class="section-label" style="margin-bottom: 1rem">
+                Our Mission
+              </div>
+              <h2>
+                We believe software should
+                <span class="grad-text">get out of your way</span>
+              </h2>
+              <p>
+                In 2021, our founding team was running a remote product agency.
+                We were juggling Jira, Notion, Slack, and spreadsheets —
+                spending more time managing tools than actually shipping work.
+              </p>
+              <p>
+                We built Flowdesk in three weeks as an internal experiment.
+                Within a month, three other teams asked to use it. That was
+                enough of a signal.
+              </p>
+              <p>
+                Today, Flowdesk is the single source of truth for engineering,
+                design, and ops teams at companies from 5 to 5,000 people. Our
+                mission hasn't changed: software that helps you think less about
+                process and more about work.
+              </p>
+              <div class="mission-stats">
+                <div class="mstat">
+                  <div class="mstat-num grad-text">2021</div>
+                  <div class="mstat-lbl">Founded in Lagos, NG</div>
+                </div>
+                <div class="mstat">
+                  <div class="mstat-num grad-text">38</div>
+                  <div class="mstat-lbl">People on the team</div>
+                </div>
+                <div class="mstat">
+                  <div class="mstat-num grad-text">$12M</div>
+                  <div class="mstat-lbl">Series A raised</div>
+                </div>
+                <div class="mstat">
+                  <div class="mstat-num grad-text">4</div>
+                  <div class="mstat-lbl">Global offices</div>
+                </div>
+              </div>
+            </div>
+            <div class="mission-visual reveal d2">
+              <div class="mv-card c1">
+                <div class="mv-lbl">Weekly tasks shipped</div>
+                <div class="mv-val grad-text">4,821</div>
+                <div class="mv-sub">↑ 18% from last week</div>
+              </div>
+              <div class="mv-card c2">
+                <div class="mv-lbl">Team velocity score</div>
+                <div class="mv-val" style="color: #34d399">
+                  98
+                  <span
+                    style="
+                      font-size: 0.9rem;
+                      font-weight: 400;
+                      color: var(--text3);
+                    "
+                    >/100</span
+                  >
+                </div>
+                <div class="mv-sub">Highest this quarter</div>
+              </div>
+              <div class="mv-card c3">
+                <div class="mv-icon">⚡</div>
+                <div
+                  style="font-size: 0.8rem; font-weight: 600; color: #a78bfa"
+                >
+                  On track
+                </div>
+                <div
+                  style="
+                    font-size: 0.72rem;
+                    color: var(--text3);
+                    margin-top: 0.2rem;
+                  "
+                >
+                  All sprints green
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Values -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">What drives us</div>
+            <h2 class="section-title reveal d1">
+              The values we<br /><span class="grad-text">actually live by</span>
+            </h2>
+            <p class="section-sub reveal d2">
+              Not wall art. These are the things that show up in every decision
+              we make — from product to support.
+            </p>
+          </div>
+          <div class="values-grid">
+            <div class="value-card reveal">
+              <div class="value-num">01</div>
+              <div class="value-icon">🎯</div>
+              <h3>Ruthless focus</h3>
+              <p>
+                Every feature we ship earns its place. We cut more than we add.
+                Complexity is a tax your team pays every day.
+              </p>
+            </div>
+            <div class="value-card reveal d1">
+              <div class="value-num">02</div>
+              <div class="value-icon">⚡</div>
+              <h3>Speed is a feature</h3>
+              <p>
+                Performance isn't an afterthought — it's respect for your time.
+                Every millisecond we save compounds across millions of tasks.
+              </p>
+            </div>
+            <div class="value-card reveal d2">
+              <div class="value-num">03</div>
+              <div class="value-icon">🌍</div>
+              <h3>Built for everyone</h3>
+              <p>
+                We're headquartered in Lagos and built for global teams from day
+                one. Great tools shouldn't have borders.
+              </p>
+            </div>
+            <div class="value-card reveal d3">
+              <div class="value-num">04</div>
+              <div class="value-icon">🔒</div>
+              <h3>Honest by default</h3>
+              <p>
+                No dark patterns, no fake urgency, no predatory pricing. We earn
+                trust slowly and intend to keep it forever.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section
+        class="section"
+        style="background: var(--bg2); border-top: 1px solid var(--border)"
+      >
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">The team</div>
+            <h2 class="section-title reveal d1">
+              People behind<br /><span class="grad-text">every pixel</span>
+            </h2>
+            <p class="section-sub reveal d2">
+              A small, focused team spread across Lagos, Amsterdam, and San
+              Francisco.
+            </p>
+          </div>
+          <div class="team-grid">
+            <div class="team-card reveal">
+              <div class="team-avatar">AO</div>
+              <div class="team-name">Amara Osei</div>
+              <div class="team-role">Co-founder & CEO</div>
+              <div class="team-bio">
+                Former engineering lead at Andela. Obsessed with operational
+                clarity and strong coffee.
+              </div>
+            </div>
+            <div class="team-card reveal d1">
+              <div class="team-avatar">KI</div>
+              <div class="team-name">Kofi Insaidoo</div>
+              <div class="team-role">Co-founder & CTO</div>
+              <div class="team-bio">
+                Built distributed systems at Cloudflare. Believes the best code
+                is code that ships on time.
+              </div>
+            </div>
+            <div class="team-card reveal d2">
+              <div class="team-avatar">NN</div>
+              <div class="team-name">Nadia Nwosu</div>
+              <div class="team-role">Head of Design</div>
+              <div class="team-bio">
+                Ex-Figma. Thinks deeply about how humans interact with
+                information under pressure.
+              </div>
+            </div>
+            <div class="team-card reveal d3">
+              <div class="team-avatar">TL</div>
+              <div class="team-name">Tobias Larsen</div>
+              <div class="team-role">Head of Growth</div>
+              <div class="team-bio">
+                Grew two SaaS products from zero to 100k users. Writes about
+                product-led growth in his spare time.
+              </div>
+            </div>
+            <div class="team-card reveal d4">
+              <div class="team-avatar">PK</div>
+              <div class="team-name">Preethi Kumar</div>
+              <div class="team-role">VP Engineering</div>
+              <div class="team-bio">
+                Led platform teams at Stripe. Cares deeply about reliability,
+                documentation, and developer happiness.
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 2.5rem" class="reveal">
+            <p
+              style="
+                color: var(--text2);
+                font-size: 0.9rem;
+                margin-bottom: 1.25rem;
+              "
+            >
+              Want to join us? We're hiring across engineering, design, and
+              growth.
+            </p>
+            <button class="btn btn-ghost" onclick="navigate('contact')">
+              View open roles →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timeline -->
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <div class="section-label reveal">Our journey</div>
+            <h2 class="section-title reveal d1">
+              From a side project to<br /><span class="grad-text"
+                >50,000 teams</span
+              >
+            </h2>
+          </div>
+          <div class="timeline reveal">
+            <div class="tl-item">
+              <div class="tl-dot">21</div>
+              <div class="tl-content">
+                <div class="tl-year">January 2021</div>
+                <h3>The idea starts in a group chat</h3>
+                <p>
+                  Amara sends a message: "I'm going to rebuild our internal
+                  tracker this weekend." Kofi replies "I'll help." Nadia joins
+                  by Sunday morning.
+                </p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot">21</div>
+              <div class="tl-content">
+                <div class="tl-year">August 2021</div>
+                <h3>First external teams onboard</h3>
+                <p>
+                  After sharing the tool with friends, three agencies request
+                  access. Flowdesk hits 500 users without a single marketing
+                  dollar spent.
+                </p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot">22</div>
+              <div class="tl-content">
+                <div class="tl-year">March 2022</div>
+                <h3>$2.5M seed round closed</h3>
+                <p>
+                  Led by Partech Africa with participation from Y Combinator
+                  alumni. The team grows from 3 to 12 in 90 days.
+                </p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot">23</div>
+              <div class="tl-content">
+                <div class="tl-year">June 2023</div>
+                <h3>10,000 teams milestone</h3>
+                <p>
+                  Flowdesk crosses 10k active teams, launches integrations with
+                  GitHub, Figma, and Slack, and ships the analytics dashboard.
+                </p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot">24</div>
+              <div class="tl-content">
+                <div class="tl-year">February 2024</div>
+                <h3>$12M Series A</h3>
+                <p>
+                  Raised from Benchmark and Sequoia. Offices open in Amsterdam
+                  and San Francisco. Enterprise tier launches.
+                </p>
+              </div>
+            </div>
+            <div class="tl-item" style="padding-bottom: 0">
+              <div
+                class="tl-dot"
+                style="
+                  background: var(--grad);
+                  box-shadow:
+                    0 0 0 4px var(--bg),
+                    0 0 0 6px rgba(124, 58, 237, 0.5),
+                    0 0 20px rgba(124, 58, 237, 0.4);
+                "
+              >
+                Now
+              </div>
+              <div class="tl-content">
+                <div class="tl-year">2026 — Today</div>
+                <h3>50,000 teams and growing</h3>
+                <p>
+                  Flowdesk is used by teams at Paystack, Flutterwave, Andela,
+                  and hundreds of scaling startups worldwide. Just getting
+                  started.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-banner">
+        <div class="container">
+          <h2 class="cta-title reveal">
+            Want to be part of<br /><span class="grad-text">what's next?</span>
+          </h2>
+          <p class="cta-sub reveal d1">
+            Join 50,000+ teams or join our team. Either way, we'd love to have
+            you.
+          </p>
+          <div class="cta-btns reveal d2">
+            <button
+              class="btn btn-primary btn-lg"
+              onclick="navigate('pricing')"
+            >
+              Start for free →
+            </button>
+            <button class="btn btn-ghost btn-lg" onclick="navigate('contact')">
+              Get in touch
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════════════
+     CONTACT PAGE
+══════════════════════════════ -->
+    <div class="page" id="page-contact">
+      <div class="page-hero">
+        <div class="section-label" style="margin-bottom: 1rem">Contact</div>
+        <h1>
+          Let's build something<br /><span class="grad-text"
+            >great together</span
+          >
+        </h1>
+        <p>
+          A question, a demo request, or just a hello — we'd love to hear from
+          you.
+        </p>
+      </div>
+      <section class="section" style="padding-top: 0">
+        <div class="container">
+          <div class="contact-grid">
+            <div class="contact-info">
+              <h2>
+                We're here<br /><span class="grad-text"
+                  >whenever you need us</span
+                >
+              </h2>
+              <p style="margin-top: 1rem">
+                Whether you're evaluating Flowdesk or already a customer — reach
+                out. Our team responds within one business day.
+              </p>
+              <div class="contact-channels">
+                <div class="channel-card">
+                  <div class="channel-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                      />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">Email us</div>
+                    <div class="channel-val">hello@flowdesk.io</div>
+                  </div>
+                </div>
+                <div class="channel-card">
+                  <div class="channel-icon">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">Live chat</div>
+                    <div class="channel-val">Mon–Fri, 9am–6pm WAT</div>
+                  </div>
+                </div>
+                <div class="channel-card">
+                  <div class="channel-icon">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="channel-label">Help center</div>
+                    <div class="channel-val">docs.flowdesk.io</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-card reveal">
+              <h3
+                style="
+                  font-size: 1.15rem;
+                  font-weight: 700;
+                  margin-bottom: 1.5rem;
+                "
+              >
+                Send us a message
+              </h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>First name</label
+                  ><input type="text" id="fname" placeholder="Damilare" />
+                </div>
+                <div class="form-group">
+                  <label>Last name</label
+                  ><input type="text" id="lname" placeholder="Joseph" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email address</label
+                ><input type="email" id="email" placeholder="you@company.com" />
+              </div>
+              <div class="form-group">
+                <label>What are you interested in?</label>
+                <select id="subject">
+                  <option value="">Select a topic</option>
+                  <option>General enquiry</option>
+                  <option>Request a demo</option>
+                  <option>Enterprise sales</option>
+                  <option>Technical support</option>
+                  <option>Partnership</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Message</label
+                ><textarea
+                  id="message"
+                  placeholder="Tell us what's on your mind..."
+                ></textarea>
+              </div>
+              <button
+                class="form-submit"
+                id="contactSubmit"
+                onclick="submitContact()"
+              >
+                Send message →
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div>
+            <div
+              class="nav-logo"
+              onclick="navigate('home')"
+              style="cursor: pointer"
+            >
+              <div class="logo-mark">
+                <svg viewBox="0 0 18 18" fill="none">
+                  <rect
+                    x="1"
+                    y="1"
+                    width="7"
+                    height="7"
+                    rx="2"
+                    fill="white"
+                    opacity=".9"
+                  />
+                  <rect
+                    x="10"
+                    y="1"
+                    width="7"
+                    height="7"
+                    rx="2"
+                    fill="white"
+                    opacity=".6"
+                  />
+                  <rect
+                    x="1"
+                    y="10"
+                    width="7"
+                    height="7"
+                    rx="2"
+                    fill="white"
+                    opacity=".6"
+                  />
+                  <rect
+                    x="10"
+                    y="10"
+                    width="7"
+                    height="7"
+                    rx="2"
+                    fill="white"
+                    opacity=".3"
+                  />
+                </svg>
+              </div>
+              Flow<span class="grad-text">desk</span>
+            </div>
+            <p class="footer-desc">
+              Your team's command center. Built for focus, built for speed.
+            </p>
+            <div class="footer-social">
+              <div class="fsoc">𝕏</div>
+              <div class="fsoc">in</div>
+              <div class="fsoc">gh</div>
+            </div>
+          </div>
+          <div class="fcol">
+            <h4>Product</h4>
+            <a onclick="navigate('features')">Features</a
+            ><a onclick="navigate('pricing')">Pricing</a><a>Changelog</a
+            ><a>Roadmap</a>
+          </div>
+          <div class="fcol">
+            <h4>Company</h4>
+            <a onclick="navigate('about')">About</a
+            ><a onclick="navigate('contact')">Contact</a><a>Blog</a
+            ><a>Careers</a>
+          </div>
+          <div class="fcol">
+            <h4>Legal</h4>
+            <a>Privacy</a><a>Terms</a><a>Security</a><a>Cookies</a>
+          </div>
+        </div>
+        <div class="footer-btm">
+          <p>© 2026 Flowdesk. Built with intentionality.</p>
+          <div class="footer-links">
+            <a>Privacy Policy</a><a>Terms of Service</a><a>Status</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* ── Navigation ───────────────────────────── */
+      function navigate(page) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + page).classList.add("active");
+        document
+          .querySelectorAll(".nav-link")
+          .forEach((l) =>
+            l.classList.toggle("active", l.dataset.page === page),
+          );
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(initReveal, 80);
+      }
+
+      /* ── Mobile menu ──────────────────────────── */
+      function toggleMenu() {
+        document.getElementById("hamburger").classList.toggle("open");
+        document.getElementById("mobileMenu").classList.toggle("open");
+      }
+      function closeMobile() {
+        document.getElementById("hamburger").classList.remove("open");
+        document.getElementById("mobileMenu").classList.remove("open");
+      }
+
+      /* ── Navbar scroll ────────────────────────── */
+      window.addEventListener("scroll", () => {
+        document
+          .getElementById("navbar")
+          .classList.toggle("scrolled", window.scrollY > 20);
+      });
+
+      /* ── Scroll reveal ────────────────────────── */
+      function initReveal() {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("visible");
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: "0px 0px -20px 0px" },
+        );
+        document
+          .querySelectorAll(
+            "#page-" + getCurrentPage() + " .reveal:not(.visible)",
+          )
+          .forEach((el) => obs.observe(el));
+      }
+
+      function getCurrentPage() {
+        const active = document.querySelector(".page.active");
+        return active ? active.id.replace("page-", "") : "home";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initReveal();
+        setTimeout(() => {
+          document
+            .querySelectorAll("#page-home .reveal")
+            .forEach((el) => el.classList.add("visible"));
+        }, 300);
+      });
+      initReveal();
+      setTimeout(() => {
+        document
+          .querySelectorAll("#page-home .reveal")
+          .forEach((el) => el.classList.add("visible"));
+      }, 200);
+
+      /* ── Animated counters ────────────────────── */
+      function animateCounter(el) {
+        const target = parseInt(el.getAttribute("data-target"), 10);
+        const suffix = el.getAttribute("data-suffix") || "";
+        const dur = 1800;
+        const start = performance.now();
+        const update = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(ease * target).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(update);
+        };
+        requestAnimationFrame(update);
+      }
+      const cObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              animateCounter(e.target);
+              cObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      document
+        .querySelectorAll("[data-target]")
+        .forEach((el) => cObs.observe(el));
+
+      /* ── Toast ────────────────────────────────── */
+      function showToast(msg, type = "success") {
+        const t = document.querySelector(".toast");
+        if (t) t.remove();
+        const el = document.createElement("div");
+        el.className = `toast ${type}`;
+        el.innerHTML = `<span>${type === "success" ? "✓" : "✕"}</span><span>${msg}</span>`;
+        document.body.appendChild(el);
+        setTimeout(() => {
+          el.style.animation = "toastOut .3s ease forwards";
+          setTimeout(() => el.remove(), 300);
+        }, 4000);
+      }
+
+      /* ── Testimonials ─────────────────────────── */
+      let testiCurrent = 0;
+      const track = document.getElementById("testiTrack");
+      const dots = document.querySelectorAll(".tdot");
+      const cards = document.querySelectorAll(".testi-card");
+
+      function goToTesti(i) {
+        const total = cards.length;
+        testiCurrent = (i + total) % total;
+        const w = cards[0].offsetWidth + 20;
+        track.style.transform = `translateX(-${testiCurrent * w}px)`;
+        dots.forEach((d, j) =>
+          d.classList.toggle("active", j === testiCurrent),
+        );
+      }
+      document
+        .getElementById("testiPrev")
+        .addEventListener("click", () => goToTesti(testiCurrent - 1));
+      document
+        .getElementById("testiNext")
+        .addEventListener("click", () => goToTesti(testiCurrent + 1));
+      dots.forEach((d, i) => d.addEventListener("click", () => goToTesti(i)));
+      setInterval(() => goToTesti(testiCurrent + 1), 5000);
+      window.addEventListener("resize", () => goToTesti(testiCurrent));
+
+      /* ── Feature tabs ─────────────────────────── */
+      function switchTab(tab) {
+        const tabs = [
+          "productivity",
+          "collaboration",
+          "analytics",
+          "automation",
+        ];
+        document
+          .querySelectorAll(".ftab")
+          .forEach((t, i) => t.classList.toggle("active", tabs[i] === tab));
+        document
+          .querySelectorAll(".ftab-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("tab-" + tab).classList.add("active");
+        setTimeout(initReveal, 50);
+      }
+
+      /* ── Pricing toggle ───────────────────────── */
+      let isAnnual = false;
+      function toggleBilling() {
+        isAnnual = !isAnnual;
+        document
+          .getElementById("billingToggle")
+          .classList.toggle("on", isAnnual);
+        document
+          .getElementById("monthly-lbl")
+          .classList.toggle("active", !isAnnual);
+        document
+          .getElementById("annual-lbl")
+          .classList.toggle("active", isAnnual);
+        document.getElementById("save-badge").style.opacity = isAnnual
+          ? "1"
+          : "0";
+        document.getElementById("price-pro").textContent = isAnnual ? 15 : 19;
+        document.getElementById("price-ent").textContent = isAnnual ? 63 : 79;
+      }
+
+      function handlePlan(plan) {
+        if (plan === "Free") {
+          showToast("Welcome to Flowdesk Free! 🎉");
+          return;
+        }
+        if (plan === "Enterprise") {
+          navigate("contact");
+          return;
+        }
+        showToast("Starting your 14-day Pro trial! No card needed. ✓");
+      }
+
+      /* ── FAQ accordion ────────────────────────── */
+      function toggleFaq(el) {
+        const item = el.parentElement;
+        const isOpen = item.classList.contains("open");
+        document
+          .querySelectorAll(".faq-item")
+          .forEach((i) => i.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      }
+
+      /* ── Contact form ─────────────────────────── */
+      function submitContact() {
+        const fname = document.getElementById("fname").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const subject = document.getElementById("subject").value;
+        const message = document.getElementById("message").value.trim();
+        const btn = document.getElementById("contactSubmit");
+        if (!fname) {
+          showToast("Please enter your first name", "error");
+          return;
+        }
+        if (!email || !email.includes("@")) {
+          showToast("Please enter a valid email", "error");
+          return;
+        }
+        if (!subject) {
+          showToast("Please select a topic", "error");
+          return;
+        }
+        if (!message) {
+          showToast("Please enter a message", "error");
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        setTimeout(() => {
+          btn.textContent = "Message sent! ✓";
+          showToast(`Thanks ${fname}! We'll get back to you shortly. ✓`);
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = "Send message →";
+            ["fname", "lname", "email", "message"].forEach(
+              (id) => (document.getElementById(id).value = ""),
+            );
+            document.getElementById("subject").value = "";
+          }, 2000);
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>

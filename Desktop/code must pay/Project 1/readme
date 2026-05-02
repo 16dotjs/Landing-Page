@@ -1,0 +1,76 @@
+# Meridian Medical Center — Hospital Website
+
+A fully responsive, multi-section hospital website built with plain HTML, CSS and Javascript.
+
+---
+
+## Live Demo
+
+[View Live Site](https://meridianmedicalcenter.netlify.app) · [GitHub Repo](https://github.com/16dotjs/Meridian-Medical-Center)
+
+> Replace the `#` links above with your actual URLs after deploying.
+
+---
+
+## Preview
+
+![Meridian Medical Center Screenshot](screenshot.png)
+
+---
+
+## About The Project
+
+This is a professional hospital website. It features a modern, trust-focused design using a navy and gold color scheme, smooth scroll animations, and a fully responsive layout that works across all screen sizes.
+
+---
+
+## Sections
+
+- **Hero** — Full-screen landing with headline, stats, and CTA buttons
+- **Services / Departments** — 6 medical departments displayed in a CSS Grid layout
+- **Doctors / Team** — 4 specialist doctor cards with ratings and experience
+- **Appointment Booking** — Working form with department selection and confirmation feedback
+- **Contact & Location** — Address, phone, email, and opening hours
+
+---
+
+## Built With
+
+- HTML5
+- CSS3 (Grid, Flexbox, Custom Properties, Animations)
+- JavaScript (scroll reveal, mobile nav, form interaction)
+- Google Fonts — Playfair Display + DM Sans
+
+---
+
+## Key Features
+
+- Mobile-first responsive design with breakpoints at 480px, 768px, and 1024px
+- Fixed navbar with blur backdrop and mobile hamburger menu
+- Scroll-triggered fade-in animations via IntersectionObserver
+- CSS Grid named areas for the two-column layout sections
+- Interactive booking form with loading and success state feedback
+- No frameworks or dependencies — zero build step required
+
+---
+
+## What I Learned
+
+- Structuring a multi-section single-page layout from scratch
+- CSS Grid for complex two-column sections
+- Using `IntersectionObserver` for scroll animations without JavaScript libraries
+- Building a responsive navbar with a working mobile menu
+- Designing for trust — color psychology and layout choices for healthcare
+
+---
+
+## Author
+
+**Damilare Oloruntoba**
+Frontend Developer · [@16dotfun](https://x.com/16dotfun) on X
+
+---
+
+## License
+
+This project was built for a client. Design and code are original work by the author.
